@@ -14,6 +14,9 @@ int listarAlunos();
 int removerAluno();
 int listarIMCalunos();
 int consultarAlunoEspecifico();
+int atualizaAluno();
+int dadosAluno(int posicao);
+int informarDadosAluno(int posicao);
 float calculaIMC(float peso, float altura); 
 
 
@@ -54,6 +57,7 @@ int menu(){
         printf("LISTAR ALUNOS - 2\n");
         printf("APAGAR ALUNO - 3\n");
         printf("LISTAR IMC DE ALUNOS - 4\n");
+        printf("ATUALIZAR ALUNO - 5 \n");
         printf("SAIR - 0\n");
         printf("Informe sua opção: ");
         scanf("%d", &opcao);
@@ -94,8 +98,17 @@ int Escolha(int opcao){
                     return valor;
 
                 } else {
-                    if (opcao == 0){
-                        return 0;
+                    if (opcao == 5){
+                        valor = atualizaAluno();
+                        return valor;
+                    } else {
+                        if (opcao == 0){
+                            return 0;
+                        } else{
+                            system("cls");
+                            printf("\nOPÇÃO INVALIDA, TENTE NOVAMENTE!\n");
+                            return 1;
+                        }
                     }
                 }
             }
@@ -126,21 +139,7 @@ int cadastraAluno(){
     if (posicao >= 0 && posicao <20){
     	if (armazenaAlunos[posicao].verificaCadastrado != 1){
 
-		    printf("\nInforme seu nome: ");
-		    fgets(armazenaAlunos[posicao].nome, 50, stdin);
-		    fflush(stdin);
-		
-		    printf("\nInforme seu email: ");
-		    fgets(armazenaAlunos[posicao].email, 50, stdin);
-		    fflush(stdin);
-		
-		    printf("\nInforme o peso do Aluno: ");
-		    scanf("%f", &armazenaAlunos[posicao].peso);
-		    fflush(stdin);
-		
-		    printf("\nInforme a altura do aluno: ");
-		    scanf("%f", &armazenaAlunos[posicao].altura);
-		    fflush(stdin);
+		    informarDadosAluno(posicao);
 		
 		    puts("\nALUNO CADASTRADO COM SUCESSO!!!\n");
 		
@@ -150,7 +149,7 @@ int cadastraAluno(){
 		    return 1;
 		} else {
 			int tenteNovamente = 0;
-			printf("\nPOSICAO OCUPADA\n");
+			printf("\nPOSIÇÃO OCUPADA\n");
 			printf("\nDeseja tentar novamente um cadastro ou retornar ao menu? (1 - Cadastro de Aluno / 2 - Menu): ");
 			scanf("%d", &tenteNovamente);
 			fflush(stdin);
@@ -163,7 +162,7 @@ int cadastraAluno(){
 					system("cls");
 					return 1;
 				} else {
-					printf("\n\nValor Invalido, por padrão há retorno ao menu\n\n");
+					printf("\n\nValor Invalido, por padrão retorno ao menu\n\n");
 					return 1;
 				}
 			}
@@ -185,7 +184,7 @@ int cadastraAluno(){
 				system("cls");
 				return 1;
 			} else {
-				printf("\n\nValor Invalido, por padrão há retorno ao menu\n\n");
+				printf("\n\nValor Invalido, por padrão retorno ao menu\n\n");
 				return 1;
 			}
 		}
@@ -240,10 +239,10 @@ int removerAluno(){
     posicao -= 1;
 
     if (posicao >= 0 && posicao < 20 && armazenaAlunos[posicao].verificaCadastrado == 1){
-        printf("Nome do Aluno: %s", armazenaAlunos[posicao].nome);
+        printf("\nNome do Aluno: %s", armazenaAlunos[posicao].nome);
         printf("\nemail: %s", armazenaAlunos[posicao].email);
-        printf("\nAltura: %.2f", armazenaAlunos[posicao].altura);
-        printf("\npeso do aluno: %.2f", armazenaAlunos[posicao].peso);
+        printf("\nAltura: %.2f\n", armazenaAlunos[posicao].altura);
+        printf("\npeso do aluno: %.2f\n", armazenaAlunos[posicao].peso);
 
         int certeza=0;
 
@@ -313,11 +312,7 @@ int consultarAlunoEspecifico(){
 	
 	if (posicao >=0 && posicao <20 && armazenaAlunos[posicao].verificaCadastrado == 1){
 	
-		puts("ALUNO: ");
-		printf("Nome: %s\n", armazenaAlunos[posicao].nome);
-	    printf("email: %s\n", armazenaAlunos[posicao].email);
-	    printf("Altura do Aluno: %.2f\n", armazenaAlunos[posicao].altura);
-	    printf("\nPeso do aluno: %.2f\n\n", armazenaAlunos[posicao].peso);
+		dadosAluno(posicao);
 	    
 	    printf("Deseja voltar para a lista de alunos ou ir para o Menu? (1 - Lista de Alunos / 2 - Menu):  ");
 	    scanf("%d", &volta);
@@ -329,7 +324,8 @@ int consultarAlunoEspecifico(){
 				system("cls");
 				return 1;
 			} else {
-				printf("Valor Invalido, por padrão há retorno ao menu");
+				printf("Valor Invalido, por padrão retorno ao menu");
+                return 1;
 			}
 		}
 	} else {
@@ -344,4 +340,94 @@ int consultarAlunoEspecifico(){
 		}
 	}	
     
+}
+
+int atualizaAluno(){
+
+    system("cls");
+    int posicao;
+
+    printf("Informa a posicao do aluno(1 a 20): ");
+    scanf("%d", &posicao);
+
+    posicao -= 1;
+
+    if (posicao >= 0 && posicao < 20 && armazenaAlunos[posicao].verificaCadastrado == 1){
+
+        dadosAluno(posicao);
+
+        int certeza = 0;
+
+        printf("Deseja atualizar estes dados?:(1 - Continua / 2 - Menu) \n");
+        scanf("%d", &certeza);
+
+        if (certeza == 1){
+            system("cls");
+
+            printf("\nINFORME OS NOVOS DADOS: \n");
+
+            informarDadosAluno(posicao);
+
+            printf("\nALUNO ATUALIZADO COM SUCESSO!!!\n");    
+            return 1;
+
+        } else {
+            if(certeza == 2){
+                return 1;
+            } else {
+               printf("Valor Invalido, por padrão retorno ao menu");
+            }
+        }
+        
+    } else {
+        int tenteNovamente = 0;
+        printf("\nALUNO NÃO ENCONTRADO\n");
+        printf("Deseja tentar atualizar os dados de um aluno novamente ou voltar para o menu?(1 - ATUALIZAR ALUNO/ 2 - MENU): ");
+        scanf("%d", &tenteNovamente);
+
+        if (tenteNovamente == 1){
+            return atualizaAluno();
+        } else {
+            if (tenteNovamente == 2){
+                return 1;
+            } else {
+                printf("Valor Invalido, por padrão retorno ao menu");
+                return 1;
+            }
+        }
+        
+    }
+
+}
+
+int dadosAluno(int posicao){
+
+    puts("DADOS DO ALUNO: ");
+    printf("\nNome: %s\n", armazenaAlunos[posicao].nome);
+    printf("email: %s\n", armazenaAlunos[posicao].email);
+    printf("Altura do Aluno: %.2f\n", armazenaAlunos[posicao].altura);
+    printf("\nPeso do aluno: %.2f\n", armazenaAlunos[posicao].peso);
+    printf("\nIMC %.2f\n\n", armazenaAlunos[posicao].IMC);
+
+}
+
+int informarDadosAluno(int posicao){
+
+    fflush(stdin);
+    printf("\nInforme seu nome: ");
+    fgets(armazenaAlunos[posicao].nome, 50, stdin);
+    fflush(stdin);
+
+    printf("\nInforme seu email: ");
+    fgets(armazenaAlunos[posicao].email, 50, stdin);
+    fflush(stdin);
+
+    printf("\nInforme o peso do Aluno (KG): ");
+    scanf("%f", &armazenaAlunos[posicao].peso);
+    fflush(stdin);
+
+    printf("\nInforme a altura do aluno: ");
+    scanf("%f", &armazenaAlunos[posicao].altura);
+    fflush(stdin);
+
 }
